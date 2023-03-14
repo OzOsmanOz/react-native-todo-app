@@ -1,21 +1,70 @@
-import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Alert,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
 import AddTodoForm from './src/components/AddTodoForm';
 import Header from './src/components/Header';
-import Input from './src/components/Input';
 
-function App() {
+const App = () => {
+  const [todos, setTodos] = useState([]);
+
+  const handleDelete = id => {
+    const filteredDelete = todos.filter(todo => todo.id !== id);
+    const deleteTodoFind = todos.find(todo => todo.id === id);
+    Alert.alert(`${deleteTodoFind.text}`, 'silmek istediğine emin misin?', [
+      {text: 'Delete', onPress: () => setTodos(filteredDelete)},
+      {text: 'Close'},
+    ]);
+  };
+
   return (
     <SafeAreaView>
+      <Header />
+      <AddTodoForm todos={todos} setTodos={setTodos} />
       <View>
-        <Header />
-      </View>
-      <View>
-        <AddTodoForm />
+        {todos.length === 0 ? (
+          <View>
+            <Text style={styles.todosText}>You do not have a todo yet</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={todos}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => (
+              <View style={styles.todosWrapper}>
+                <View style={styles.todosTextWrapper}>
+                  <Text style={styles.todosText}>{item.text}</Text>
+                </View>
+                <View style={styles.buttonWrapper}>
+                  <TouchableOpacity
+                    style={[styles.todosButton, styles.todosButtonEdit]}>
+                    <Text style={styles.todosButtonText}>Edit</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleDelete(item.id)}
+                    style={[styles.todosButton, styles.todosButtonDelete]}>
+                    <Text style={styles.todosButtonText}>Delete</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.todosButton, styles.todosButtonIsDone]}>
+                    <Text style={styles.todosButtonText}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
-}
+};
 
 const fonts = {
   Ubuntu: {
@@ -25,20 +74,47 @@ const fonts = {
     medium: 'Ubuntu-Medium',
     regular: 'Ubuntu-Regular',
   },
-  Raleway: {
-    bold: 'Raleway-Bold',
-    semiBold: 'Raleway-SemiBold',
-    italic: 'Raleway-Italic',
-    light: 'Raleway-Light',
-    medium: 'Raleway-Medium',
-    regular: 'Raleway-Regular',
-  },
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 22,
-    fontFamily: fonts.Ubuntu.bold,
+  todosWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 3,
+    marginHorizontal: 5,
+    borderRadius: 4,
+    marginVertical: 5,
+  },
+  todosTextWrapper: {
+    paddingHorizontal: 2,
+  },
+  todosText: {
+    fontFamily: fonts.Ubuntu.medium,
+    textAlign: 'center',
+  },
+  buttonWrapper: {
+    flexDirection: 'row',
+    gap: 3,
+  },
+  todosButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+    borderRadius: 4,
+  },
+  todosButtonEdit: {
+    backgroundColor: '#658864',
+  },
+  todosButtonDelete: {
+    backgroundColor: '#DA5C53',
+  },
+  todosButtonIsDone: {
+    backgroundColor: '#B2B2B2',
+  },
+  todosButtonText: {
+    fontFamily: fonts.Ubuntu.medium,
+    color: '#fff',
   },
 });
 

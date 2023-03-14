@@ -37,7 +37,7 @@ const fonts = {
 const styles = StyleSheet.create({
   header: {
     borderBottomWidth: 1,
-    borderColor: '#5F7161',
+    borderColor: '#4AA3BA',
     marginHorizontal: 50,
   },
   headerText: {

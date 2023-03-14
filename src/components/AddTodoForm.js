@@ -1,10 +1,39 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import Input from './Input';
 
 const AddTodoForm = props => {
-  const [todoText, setTodoText] = useState('');
-  console.log('todoText', todoText);
+  const {todos, setTodos} = props;
+  const [todoText, setTodoText] = useState({
+    id: String(new Date().getTime()),
+    text: '',
+    isDone: false,
+  });
+
+  const handleSubmit = () => {
+    if (!todoText.text) {
+      Alert.alert('Warning', "Todo text can't be empty", [{text: 'Close'}]);
+      return;
+    }
+
+    const hasTodo = todos.find(todo => todo.text === todoText.text);
+
+    if (hasTodo) {
+      Alert.alert('Warning', 'There is a task with the same name', [
+        {text: 'Close'},
+      ]);
+      return;
+    }
+    setTodos([...todos, todoText]);
+    setTodoText('');
+
+    setTodoText({
+      id: String(new Date().getTime()),
+      text: '',
+      isDone: false,
+    });
+  };
   return (
     <View style={styles.addTodoWrapper}>
       <View style={styles.input}>
@@ -15,7 +44,7 @@ const AddTodoForm = props => {
         />
       </View>
       <View>
-        <TouchableOpacity style={styles.addTodoButton}>
+        <TouchableOpacity onPress={handleSubmit} style={styles.addTodoButton}>
           <Text style={styles.addTodoButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
@@ -45,7 +74,7 @@ const styles = StyleSheet.create({
   },
   addTodoButton: {
     borderRadius: 4,
-    backgroundColor: '#5F7161',
+    backgroundColor: '#4AA3BA',
     padding: 9,
   },
   addTodoButtonText: {

@@ -11,16 +11,26 @@ const Input = ({placeholder, value, setValue, style}) => {
     />
   );
 };
+const fonts = {
+  Ubuntu: {
+    bold: 'Ubuntu-Bold',
+    italic: 'Ubuntu-Italic',
+    light: 'Ubuntu-Light',
+    medium: 'Ubuntu-Medium',
+    regular: 'Ubuntu-Regular',
+  },
+};
 
 const styles = StyleSheet.create({
   inputText: {
     borderWidth: 1,
-    borderColor: '#5F7161',
+    borderColor: '#4AA3BA',
     marginVertical: 20,
     marginHorizontal: 10,
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 4,
+    fontFamily: fonts.Ubuntu.medium,
   },
 });
 
