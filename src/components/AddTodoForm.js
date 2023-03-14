@@ -10,7 +10,8 @@ const AddTodoForm = props => {
     text: '',
     isDone: false,
   });
-
+  //   console.log('todoText', todoText);
+  //   console.log('todos', todos);
   const handleSubmit = () => {
     if (!todoText.text) {
       Alert.alert('Warning', "Todo text can't be empty", [{text: 'Close'}]);
@@ -18,7 +19,6 @@ const AddTodoForm = props => {
     }
 
     const hasTodo = todos.find(todo => todo.text === todoText.text);
-
     if (hasTodo) {
       Alert.alert('Warning', 'There is a task with the same name', [
         {text: 'Close'},
@@ -26,8 +26,6 @@ const AddTodoForm = props => {
       return;
     }
     setTodos([...todos, todoText]);
-    setTodoText('');
-
     setTodoText({
       id: String(new Date().getTime()),
       text: '',

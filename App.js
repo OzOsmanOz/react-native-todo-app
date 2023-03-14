@@ -24,6 +24,18 @@ const App = () => {
     ]);
   };
 
+  const changeIsDone = id => {
+    const findChange = todos.find(todo => todo.id === id);
+    console.log('findChange', findChange);
+    // console.log('todos', todos);
+    const changedTodo = {
+      ...findChange,
+      isDone: !findChange.isDone,
+    };
+    const filteredChange = todos.filter(todo => todo.id !== id);
+    setTodos([...filteredChange, changedTodo]);
+  };
+
   return (
     <SafeAreaView>
       <Header />
@@ -38,9 +50,23 @@ const App = () => {
             data={todos}
             keyExtractor={item => item.id}
             renderItem={({item}) => (
-              <View style={styles.todosWrapper}>
+              <View
+                style={[
+                  styles.todosWrapper,
+                  {
+                    backgroundColor: item.isDone ? '#fff' : '#B2B2B2',
+                  },
+                ]}>
                 <View style={styles.todosTextWrapper}>
-                  <Text style={styles.todosText}>{item.text}</Text>
+                  <Text
+                    style={[
+                      styles.todosText,
+                      {
+                        color: item.isDone ? '#000' : '#fff',
+                      },
+                    ]}>
+                    {item.text}
+                  </Text>
                 </View>
                 <View style={styles.buttonWrapper}>
                   <TouchableOpacity
@@ -53,8 +79,23 @@ const App = () => {
                     <Text style={styles.todosButtonText}>Delete</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={[styles.todosButton, styles.todosButtonIsDone]}>
-                    <Text style={styles.todosButtonText}>Done</Text>
+                    onPress={() => changeIsDone(item.id)}
+                    style={[
+                      styles.todosButton,
+                      styles.todosButtonIsDone,
+                      {
+                        backgroundColor: item.isDone ? '#B2B2B2' : '#fff',
+                      },
+                    ]}>
+                    <Text
+                      style={[
+                        styles.todosButtonText,
+                        {
+                          color: item.isDone ? '#fff' : '#000',
+                        },
+                      ]}>
+                      {item.isDone ? 'Done' : 'UnDone'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
